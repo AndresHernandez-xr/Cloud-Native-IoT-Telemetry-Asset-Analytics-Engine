@@ -27,17 +27,13 @@ Utilizing a **Medallion Architecture (Bronze → Silver → Gold)** powered by *
 ### Step-by-Step Deployment
 To execute this architecture on your own workspace instance, run the codebase files sequentially inside a Databricks Notebook environment:
 
-#### 1. Environment Purge & State Reset
-Execute the setup routine to clear background transactional loops and generate a pristine workspace tracking directory:
-
-**2. Active Fleet Stream Simulator
-
-3. Core Medallion Processing Pipeline
-
-4. Executive Analytical Verification**
-
-Query the live memory matrix to render business intelligence reports:
-
+1. Environment Purge and Reset
+    environment_reset.py
+2. Active Fleet Stream Simulator
+    iot_stream_simulator.py
+3. Core Medallion Processing Pipeline & Executive Analytical Verification
+    medallion_core_pipeline.py
+   
 <img width="1105" height="709" alt="image" src="https://github.com/user-attachments/assets/ed92e114-5ee9-49a6-92ca-7d12a705eb82" />
 
 
