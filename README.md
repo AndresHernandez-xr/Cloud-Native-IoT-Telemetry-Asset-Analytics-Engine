@@ -193,3 +193,44 @@ Query the live memory matrix to render business intelligence reports:
 display(spark.read.table("gold_fleet_analytics").orderBy("average_temperature_c", descending=False))
 
 <img width="1105" height="709" alt="image" src="https://github.com/user-attachments/assets/ed92e114-5ee9-49a6-92ca-7d12a705eb82" />
+
+
+Architecture Diagram
+┌────────────────────────────────────────────────────────────────────────┐
+ │                      FLEET ASSET EDGE ENVIROMENT                      │
+ └────────────────────────────────────┬───────────────────────────────────┘
+                                      │
+                         [ Python JSON Generation ]
+                                      ▼
+ ┌────────────────────────────────────────────────────────────────────────┐
+ │                      BRONZE TIER: LANDING ZONE                         │
+ │               Path: /Workspace/Users/.../landing/                      │
+ │   - Raw, semi-structured, nested telemetry JSON log batches            │
+ └────────────────────────────────────┬───────────────────────────────────┘
+                                      │
+                     [ Databricks Auto Loader Stream ]
+                     [   .trigger(availableNow=True) ]
+                                      ▼
+ ┌────────────────────────────────────────────────────────────────────────┐
+ │                 SILVER TIER: ENRICHMENT & QUALITY CONTROL              │
+ │                   Target Memory Sink: silver_fleet_records             │
+ │   - Flat maps metrics.temperature_c & metrics.battery_percentage       │
+ │   - Captures metadata trace lineage via _metadata.file_path            │
+ │   - Flags instrumentation test spikes (-999.0°C) as anomalous         │
+ └────────────────────────────────────┬───────────────────────────────────┘
+                                      │
+                   [ High-Performance Batch Aggregation ]
+                                      ▼
+ ┌────────────────────────────────────────────────────────────────────────┐
+ │                    GOLD TIER: EXECUTIVE METRICS                        │
+ │                Target Temp View: gold_fleet_analytics                  │
+ │   - Excludes outliers and groups metrics universally by device_type    │
+ │   - Calculates fleet volume, rolling avgs, & critical alert counts     │
+ └────────────────────────────────────┬───────────────────────────────────┘
+                                      │
+                       [ Analytical Reporting Layer ]
+                                      ▼
+ ┌────────────────────────────────────────────────────────────────────────┐
+ │                 DATABRICKS NOTEBOOK VISUALIZATION                      │
+ │            Output Grid: display(spark.read.table(...))                 │
+ └────────────────────────────────────────────────────────────────────────┘
