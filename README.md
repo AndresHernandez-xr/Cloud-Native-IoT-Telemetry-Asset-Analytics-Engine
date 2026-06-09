@@ -30,11 +30,11 @@ To execute this architecture on your own workspace instance, run the codebase fi
 #### 1. Environment Purge & State Reset
 Execute the setup routine to clear background transactional loops and generate a pristine workspace tracking directory:
 
-2. Active Fleet Stream Simulator
+**2. Active Fleet Stream Simulator
 
 3. Core Medallion Processing Pipeline
 
-4. Executive Analytical Verification
+4. Executive Analytical Verification**
 
 Query the live memory matrix to render business intelligence reports:
 
