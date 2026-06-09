@@ -236,33 +236,4 @@ Architecture Diagram
  └────────────────────────────────────────────────────────────────────────┘
 
 
-graph TD
-    %% Styling Configuration
-    classDef bronze fill:#b87333,stroke:#333,stroke-width:2px,color:#fff;
-    classDef silver fill:#aaa,stroke:#333,stroke-width:2px,color:#000;
-    classDef gold fill:#d4af37,stroke:#333,stroke-width:2px,color:#000;
-    classDef process fill:#f4f4f4,stroke:#666,stroke-width:1px,stroke-dasharray: 5 5;
-    classDef platform fill:#1f4e79,stroke:#111,stroke-width:2px,color:#fff;
 
-    %% Workflow Nodes
-    Edge[📡 Fleet Asset Edge Logs] -->|Python json.dumps Context| Bronze[📥 Bronze Tier: Landing Directory]
-    
-    subgraph Ingestion_Engine [Databricks Streaming Pipeline]
-        Bronze -->|Auto Loader Ingestion| StreamProcess(🧹 Silver Parsing & Data Cleansing)
-        StreamProcess -->|Incremental Checkpointing| Silver[🥈 Silver Tier: silver_fleet_records RAM Table]
-    end
-
-    subgraph Analytical_Engine [Batch Engine]
-        Silver -->|Excludes Anomalous Rows| GoldProcess(📈 Metric Aggregation & Rounding)
-        GoldProcess -->|CreateOrReplaceTempView| Gold[🥇 Gold Tier: gold_fleet_analytics View]
-    end
-
-    Gold -->|Spark SQL Client Execution| Visual[📊 BI Reporting Dashboard & display Matrix]
-
-    %% Class Assignments
-    class Edge platform;
-    class Bronze bronze;
-    class StreamProcess,GoldProcess process;
-    class Silver silver;
-    class Gold gold;
-    class Visual platform;
